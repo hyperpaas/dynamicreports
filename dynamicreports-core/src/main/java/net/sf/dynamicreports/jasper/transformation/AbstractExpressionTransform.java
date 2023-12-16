@@ -20,6 +20,7 @@
  */
 package net.sf.dynamicreports.jasper.transformation;
 
+import java.util.Arrays;
 import net.sf.dynamicreports.design.constant.ResetType;
 import net.sf.dynamicreports.design.definition.DRIDesignField;
 import net.sf.dynamicreports.design.definition.DRIDesignGroup;
@@ -37,6 +38,7 @@ import net.sf.dynamicreports.jasper.constant.ValueType;
 import net.sf.dynamicreports.jasper.exception.JasperDesignException;
 import net.sf.dynamicreports.report.constant.SystemExpression;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExpressionChunk;
 import net.sf.jasperreports.engine.JRGenericElementParameter;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRPropertyExpression;
@@ -47,6 +49,7 @@ import net.sf.jasperreports.engine.design.JRDesignGenericElementParameter;
 import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.type.ExpressionTypeEnum;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 
 import java.text.MessageFormat;
@@ -223,6 +226,12 @@ public abstract class AbstractExpressionTransform {
     private JRDesignExpression expression(DRIDesignExpression simpleExpression) {
         JRDesignExpression expression = new JRDesignExpression();
         expression.setText(getExpressionText(simpleExpression));
+        if (simpleExpression instanceof DRIDesignJasperExpression) {
+            boolean isSimpleText = ((DRIDesignJasperExpression)simpleExpression).isSimpleTextExpression();
+            if (isSimpleText) {
+                expression.setType(ExpressionTypeEnum.SIMPLE_TEXT);
+            }
+        }
         return expression;
     }
 

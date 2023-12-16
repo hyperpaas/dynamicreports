@@ -34,4 +34,6 @@ public interface DRIDesignJasperExpression extends DRIDesignExpression {
      * @return a {@link java.lang.String} object.
      */
     public String getExpression();
+
+    boolean isSimpleTextExpression();
 }

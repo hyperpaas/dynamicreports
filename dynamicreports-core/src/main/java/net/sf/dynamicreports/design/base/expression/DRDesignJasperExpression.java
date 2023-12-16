@@ -21,6 +21,7 @@
 package net.sf.dynamicreports.design.base.expression;
 
 import net.sf.dynamicreports.design.definition.expression.DRIDesignJasperExpression;
+import net.sf.dynamicreports.report.builder.expression.JasperSimpleTextExpression;
 import net.sf.dynamicreports.report.constant.Constants;
 import net.sf.dynamicreports.report.definition.expression.DRIJasperExpression;
 
@@ -48,6 +49,11 @@ public class DRDesignJasperExpression implements DRIDesignJasperExpression {
     @Override
     public String getExpression() {
         return jasperExpression.getExpression();
+    }
+
+    @Override
+    public boolean isSimpleTextExpression() {
+        return jasperExpression instanceof JasperSimpleTextExpression;
     }
 
     /** {@inheritDoc} */

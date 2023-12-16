@@ -79,7 +79,7 @@ public class Column3Test extends AbstractJasperValueTest implements Serializable
         columnTitleValueTest(column2, "Column2");
         // column3
         columnDetailCountTest(column3, 10);
-        columnDetailValueTest(column3, 1, new SimpleDateFormat(type.dateYearToMinuteType().getPattern()).format(new Date()));
+        columnDetailValueTest(column3, 1, new SimpleDateFormat(type.dateYearToMinuteType().getPattern(), Locale.ENGLISH).format(new Date()));
         columnTitleCountTest(column3, 1);
         columnTitleValueTest(column3, "Column3");
         // column4

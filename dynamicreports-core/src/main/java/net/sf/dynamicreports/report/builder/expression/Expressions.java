@@ -317,6 +317,16 @@ public class Expressions {
         return jasperSyntax(expression, Object.class);
     }
 
+    /**
+     * Create a new jasper simple text expression, useful only for showing a static text
+     * and force use jasper <code>SimpleTextExpressionEvaluator</code> to evaluate the expression.
+     * @param text - text to be shown
+     * @return the expression
+     */
+    public static JasperExpression<String> jasperSimpleText(final String text) {
+        return new JasperSimpleTextExpression(text);
+    }
+
     // property
 
     /**
