@@ -20,12 +20,14 @@
  */
 package net.sf.dynamicreports.jasper.transformation;
 
+import net.sf.dynamicreports.design.base.expression.DRDesignSimpleExpression;
 import net.sf.dynamicreports.design.definition.DRIDesignHyperLink;
 import net.sf.dynamicreports.design.definition.DRIDesignMargin;
 import net.sf.dynamicreports.design.definition.DRIDesignPage;
 import net.sf.dynamicreports.design.definition.DRIDesignParameter;
 import net.sf.dynamicreports.design.definition.DRIDesignQuery;
 import net.sf.dynamicreports.design.definition.DRIDesignReport;
+import net.sf.dynamicreports.design.definition.expression.DRIDesignSimpleExpression;
 import net.sf.dynamicreports.jasper.base.CustomScriptlet;
 import net.sf.dynamicreports.jasper.base.JasperCustomValues;
 import net.sf.dynamicreports.jasper.base.JasperReportParameters;
@@ -134,6 +136,7 @@ public class ReportTransform {
     public void addDependencies() {
         DRIDesignReport report = accessor.getReport();
         if (!accessor.getCustomValues().isEmpty() || !report.getScriptlets().isEmpty() || accessor.getCustomValues().getStartPageNumber() != null || report.isTableOfContents()) {
+            addDetailParameters();
             addParameter(JasperCustomValues.NAME, JasperCustomValues.class, accessor.getCustomValues());
         }
         if (accessor.getMasterReportParameters() != null) {
@@ -162,6 +165,34 @@ public class ReportTransform {
         }
         if (value != null) {
             accessor.getParameters().put(name, value);
+        }
+    }
+
+    private void addDetailParameters() {
+        JasperCustomValues customValues = accessor.getCustomValues();
+        for (DRIDesignSimpleExpression simpleExpression : customValues.getSimpleExpressions()) {
+            String name = simpleExpression.getName();
+            Class<?> valueClass = simpleExpression.getValueClass();
+            Object value = simpleExpression.evaluate(null);
+
+            if (!accessor.getDesign().getParametersMap().containsKey(name)) {
+                try {
+                    JRDesignParameter jrParameter = new JRDesignParameter();
+                    jrParameter.setName(name);
+                    jrParameter.setValueClass(valueClass);
+                    accessor.getDesign().addParameter(jrParameter);
+                } catch (JRException e) {
+                    throw new JasperDesignException("Registration failed for parameter \"" + name + "\"", e);
+                }
+            } else {
+                JRParameter jrParameter = accessor.getDesign().getParametersMap().get(name);
+                if (!valueClass.isAssignableFrom(jrParameter.getValueClass())) {
+                    throw new JasperDesignException("Registration failed for parameter \"" + name + "\", parameter is not instance of " + valueClass.getName());
+                }
+            }
+            if (value != null) {
+                accessor.getParameters().put(name, value);
+            }
         }
     }
 

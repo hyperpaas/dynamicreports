@@ -252,8 +252,14 @@ public abstract class AbstractExpressionTransform {
             String parameterName = getExpressionParameterName(complexExpression.getParameterName());
             return MessageFormat.format(COMPLEX_VALUE, parameterName, expression.getName(), values);
         } else if (expression instanceof DRIDesignSimpleExpression) {
-            String parameterName = getExpressionParameterName(((DRIDesignSimpleExpression) expression).getParameterName());
-            return MessageFormat.format(VALUE, parameterName, expression.getName());
+            DRIDesignSimpleExpression driDesignSimpleExpression = (DRIDesignSimpleExpression) expression;
+            boolean useParameter = driDesignSimpleExpression.getParameterName() != null;
+            String parameterName = getExpressionParameterName(driDesignSimpleExpression.getParameterName());
+            if (useParameter) {
+                return MessageFormat.format(PARAMETER_VALUE, parameterName);
+            } else {
+                return MessageFormat.format(VALUE, parameterName, expression.getName());
+            }
         } else if (expression instanceof DRIDesignSystemExpression) {
             String name = ((DRIDesignSystemExpression) expression).getName();
             if (name.equals(SystemExpression.PAGE_NUMBER.name())) {

@@ -45,6 +45,7 @@ import net.sf.dynamicreports.design.definition.expression.DRIDesignSimpleExpress
 import net.sf.dynamicreports.design.definition.expression.DRIDesignSystemExpression;
 import net.sf.dynamicreports.design.exception.DRDesignReportException;
 import net.sf.dynamicreports.report.base.DRVariable;
+import net.sf.dynamicreports.report.builder.expression.ImageValueExpression;
 import net.sf.dynamicreports.report.constant.Calculation;
 import net.sf.dynamicreports.report.constant.Evaluation;
 import net.sf.dynamicreports.report.definition.DRIField;
@@ -175,6 +176,10 @@ public abstract class AbstractExpressionTransform {
         } else if (expression instanceof DRIJasperExpression<?>) {
             express = new DRDesignJasperExpression((DRIJasperExpression<?>) expression);
         } else if (expression instanceof DRISimpleExpression<?>) {
+            // is image value expression and parameter name is null, set parameter name as expression name
+            if (expression instanceof ImageValueExpression && parameterName == null) {
+                parameterName = expression.getName();
+            }
             express = new DRDesignSimpleExpression((DRISimpleExpression<?>) expression, parameterName);
         } else if (expression instanceof DRIComplexExpression<?>) {
             express = transformComplexExpression((DRIComplexExpression<?>) expression, parameterName);

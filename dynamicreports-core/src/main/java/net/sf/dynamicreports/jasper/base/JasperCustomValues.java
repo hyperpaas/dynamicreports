@@ -19,6 +19,7 @@
 
 package net.sf.dynamicreports.jasper.base;
 
+import java.util.Set;
 import net.sf.dynamicreports.design.definition.expression.DRIDesignComplexExpression;
 import net.sf.dynamicreports.design.definition.expression.DRIDesignSimpleExpression;
 import net.sf.dynamicreports.jasper.base.tableofcontents.JasperTocHeading;
@@ -331,6 +332,10 @@ public class JasperCustomValues implements DRICustomValues {
     @Override
     public void setSubreportWidth(Integer subreportWidth) {
         this.subreportWidth = subreportWidth;
+    }
+
+    public Set<DRIDesignSimpleExpression> getSimpleExpressions() {
+        return Set.copyOf(simpleExpressions.values());
     }
 
     /** {@inheritDoc} */

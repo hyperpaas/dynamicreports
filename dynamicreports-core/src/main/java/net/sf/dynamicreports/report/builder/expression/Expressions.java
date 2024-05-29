@@ -192,6 +192,13 @@ public class Expressions {
     }
 
     /**
+     * simple image, not compiled
+     */
+    public static ImageValueExpression simpleImage(final Image image) {
+        return new ImageValueExpression(image);
+    }
+
+    /**
      * <p>inputStream.</p>
      *
      * @param inputStream a {@link java.io.InputStream} object.
