@@ -136,7 +136,11 @@ public class ReportTransform {
     public void addDependencies() {
         DRIDesignReport report = accessor.getReport();
         if (!accessor.getCustomValues().isEmpty() || !report.getScriptlets().isEmpty() || accessor.getCustomValues().getStartPageNumber() != null || report.isTableOfContents()) {
-            addDetailParameters();
+            try {
+                addDetailParameters();
+            } catch (Exception e) {
+                // ignore
+            }
             addParameter(JasperCustomValues.NAME, JasperCustomValues.class, accessor.getCustomValues());
         }
         if (accessor.getMasterReportParameters() != null) {
@@ -171,6 +175,9 @@ public class ReportTransform {
     private void addDetailParameters() {
         JasperCustomValues customValues = accessor.getCustomValues();
         for (DRIDesignSimpleExpression simpleExpression : customValues.getSimpleExpressions()) {
+            if (!(simpleExpression instanceof DRDesignSimpleExpression)) {
+                continue;
+            }
             String name = simpleExpression.getName();
             Class<?> valueClass = simpleExpression.getValueClass();
             Object value = simpleExpression.evaluate(null);
